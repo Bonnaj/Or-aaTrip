@@ -107,6 +107,276 @@ function addMsg(text, tipo) {
   chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
+// ======================================================
+// SISTEMA DE CONVITES COM ENVIO DE E-MAIL
+// ======================================================
+
+(function initInvitesSystem() {
+  const formConvite = document.getElementById('form-convite');
+  const listaConvites = document.getElementById('lista-convites');
+  const emptyInvites = document.getElementById('empty-invites');
+  const secaoConvites = document.getElementById('convites');
+  const destinoViagemSpan = document.getElementById('destino-viagem');
+  const btnEnviarConvite = document.getElementById('btn-enviar-convite');
+  const btnText = document.getElementById('btn-text');
+  const btnLoading = document.getElementById('btn-loading');
+  const btnEmailFallback = document.getElementById('btn-email-fallback');
+  
+  // Carregar convites do localStorage
+  let convites = JSON.parse(localStorage.getItem('orcamtrip_convites')) || [];
+  
+  // Inicializar EmailJS (substitua com suas credenciais)
+  // emailjs.init("YOUR_PUBLIC_KEY");
+  
+  // Atualizar a lista de convites
+  function atualizarListaConvites() {
+    // Limpar lista
+    listaConvites.innerHTML = '';
+    
+    if (convites.length === 0) {
+      // Mostrar mensagem de lista vazia
+      listaConvites.appendChild(emptyInvites);
+      emptyInvites.style.display = 'block';
+      return;
+    }
+    
+    // Esconder mensagem de lista vazia
+    emptyInvites.style.display = 'none';
+    
+    // Adicionar cada convite à lista
+    convites.forEach((convite, index) => {
+      const conviteCard = document.createElement('div');
+      conviteCard.className = 'invite-card';
+      
+      const statusClass = `status-${convite.status}`;
+      
+      conviteCard.innerHTML = `
+        <div class="invite-info">
+          <h4>${convite.nome}</h4>
+          <p>${convite.email}</p>
+          <p>Enviado em: ${new Date(convite.dataEnvio).toLocaleDateString('pt-BR')}</p>
+        </div>
+        <div class="invite-status">
+          <span class="${statusClass}">${getStatusText(convite.status)}</span>
+          <button class="btn btn-secondary" data-index="${index}">✕</button>
+        </div>
+      `;
+      
+      listaConvites.appendChild(conviteCard);
+    });
+    
+    // Adicionar event listeners aos botões de remover
+    document.querySelectorAll('.invite-card .btn-secondary').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const index = parseInt(this.getAttribute('data-index'));
+        removerConvite(index);
+      });
+    });
+  }
+  
+  // Função auxiliar para obter texto do status
+  function getStatusText(status) {
+    switch(status) {
+      case 'pending': return 'Pendente';
+      case 'accepted': return 'Aceito';
+      case 'declined': return 'Recusado';
+      default: return 'Pendente';
+    }
+  }
+  
+  // Remover convite
+  function removerConvite(index) {
+    if (confirm('Tem certeza que deseja remover este convite?')) {
+      convites.splice(index, 1);
+      localStorage.setItem('orcamtrip_convites', JSON.stringify(convites));
+      atualizarListaConvites();
+    }
+  }
+  
+  // Função para enviar e-mail com EmailJS
+  function enviarEmailComEmailJS(nome, email, mensagem) {
+    // Mostrar loading
+    btnText.textContent = 'Enviando...';
+    btnLoading.style.display = 'inline-block';
+    btnEnviarConvite.disabled = true;
+    
+    // Parâmetros do template (ajuste conforme seu template no EmailJS)
+    const templateParams = {
+      to_name: nome,
+      to_email: email,
+      from_name: 'OrçaTrip',
+      message: mensagem || `Olá ${nome}! Estou planejando uma viagem incrível com o OrçaTrip e gostaria que você participasse. Confira os detalhes da viagem!`,
+      destination: destinoViagemSpan.textContent,
+      reply_to: 'no-reply@orcatrip.com'
+    };
+    
+    // Enviar e-mail (substitua com seu Service ID e Template ID)
+    emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', templateParams)
+      .then(function(response) {
+        console.log('E-mail enviado com sucesso!', response.status, response.text);
+        alert('Convite enviado com sucesso!');
+      }, function(error) {
+        console.error('Falha ao enviar e-mail:', error);
+        alert('Falha ao enviar o convite. Tente usar a opção "Abrir cliente de e-mail" ou verifique suas credenciais do EmailJS.');
+      })
+      .finally(function() {
+        // Restaurar botão
+        btnText.textContent = 'Enviar convite';
+        btnLoading.style.display = 'none';
+        btnEnviarConvite.disabled = false;
+      });
+  }
+  
+  // Função para abrir cliente de e-mail nativo (fallback)
+  function abrirClienteEmail(nome, email, mensagem) {
+    const assunto = `Convite para viagem - ${destinoViagemSpan.textContent}`;
+    const corpo = mensagem || `Olá ${nome}!\n\nEstou planejando uma viagem para ${destinoViagemSpan.textContent} com o OrçaTrip e gostaria que você participasse!\n\nAcesse o OrçaTrip para mais detalhes: [URL_DO_SITE]\n\nAguardo sua resposta!\n\nAtenciosamente,\n[SEU_NOME]`;
+    
+    const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(assunto)}&body=${encodeURIComponent(corpo)}`;
+    window.location.href = mailtoLink;
+  }
+  
+  // Enviar novo convite
+  formConvite.addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const nome = document.getElementById('nome-convidado').value.trim();
+    const email = document.getElementById('email-convidado').value.trim();
+    const mensagem = document.getElementById('mensagem-convite').value.trim();
+    
+    if (!nome || !email) {
+      alert('Por favor, preencha pelo menos o nome e e-mail do convidado.');
+      return;
+    }
+    
+    // Validar formato de e-mail
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      alert('Por favor, insira um e-mail válido.');
+      return;
+    }
+    
+    // Criar novo convite
+    const novoConvite = {
+      nome,
+      email,
+      mensagem,
+      status: 'pending',
+      dataEnvio: new Date().toISOString()
+    };
+    
+    // Adicionar à lista
+    convites.push(novoConvite);
+    
+    // Salvar no localStorage
+    localStorage.setItem('orcamtrip_convites', JSON.stringify(convites));
+    
+    // Atualizar a lista
+    atualizarListaConvites();
+    
+    // Limpar formulário
+    formConvite.reset();
+    
+    // Tentar enviar e-mail com EmailJS
+    enviarEmailComEmailJS(nome, email, mensagem);
+  });
+  
+  // Botão fallback para abrir cliente de e-mail
+  btnEmailFallback.addEventListener('click', function() {
+    const nome = document.getElementById('nome-convidado').value.trim();
+    const email = document.getElementById('email-convidado').value.trim();
+    const mensagem = document.getElementById('mensagem-convite').value.trim();
+    
+    if (!nome || !email) {
+      alert('Por favor, preencha pelo menos o nome e e-mail do convidado antes de usar esta opção.');
+      return;
+    }
+    
+    abrirClienteEmail(nome, email, mensagem);
+  });
+  
+  // Inicializar a lista de convites
+  atualizarListaConvites();
+  
+  // Função para ativar a seção de convites
+  window.ativarConvites = function(destino) {
+    // Atualizar o destino na seção
+    destinoViagemSpan.textContent = destino;
+    
+    // Mostrar a seção de convites
+    secaoConvites.style.display = 'block';
+    
+    // Rolar suavemente até a seção
+    secaoConvites.scrollIntoView({ behavior: 'smooth' });
+  };
+})();
+
+// ======================================================
+// MODAL DE CONFIRMAÇÃO DE VIAGEM
+// ======================================================
+
+(function initModalViagem() {
+  const modalViagem = document.getElementById('modal-viagem');
+  const modalClose = document.getElementById('modal-close');
+  const modalCancelar = document.getElementById('modal-cancelar');
+  const modalConfirmar = document.getElementById('modal-confirmar');
+  const modalDestino = document.getElementById('modal-destino');
+  const modalOrcamento = document.getElementById('modal-orcamento');
+  const modalDatas = document.getElementById('modal-datas');
+  
+  let destinoSelecionado = '';
+  
+  // Fechar modal
+  function fecharModal() {
+    modalViagem.classList.remove('active');
+  }
+  
+  // Abrir modal
+  window.abrirModalViagem = function(destino) {
+    destinoSelecionado = destino;
+    
+    // Preencher informações no modal
+    modalDestino.textContent = destino;
+    modalOrcamento.textContent = document.getElementById('orcamento').value || 'Não informado';
+    
+    const dataInicio = document.getElementById('dataInicio').value;
+    const dataFim = document.getElementById('dataFim').value;
+    
+    if (dataInicio && dataFim) {
+      const dataInicioFormatada = new Date(dataInicio).toLocaleDateString('pt-BR');
+      const dataFimFormatada = new Date(dataFim).toLocaleDateString('pt-BR');
+      modalDatas.textContent = `${dataInicioFormatada} a ${dataFimFormatada}`;
+    } else {
+      modalDatas.textContent = 'Não informadas';
+    }
+    
+    // Mostrar modal
+    modalViagem.classList.add('active');
+  };
+  
+  // Event listeners para fechar modal
+  modalClose.addEventListener('click', fecharModal);
+  modalCancelar.addEventListener('click', fecharModal);
+  
+  // Fechar modal ao clicar fora
+  modalViagem.addEventListener('click', function(e) {
+    if (e.target === modalViagem) {
+      fecharModal();
+    }
+  });
+  
+  // Confirmar viagem
+  modalConfirmar.addEventListener('click', function() {
+    // Fechar modal
+    fecharModal();
+    
+    // Ativar seção de convites
+    window.ativarConvites(destinoSelecionado);
+    
+    // Mostrar mensagem de sucesso
+    alert(`Viagem para ${destinoSelecionado} confirmada com sucesso! Agora você pode convidar amigos e familiares.`);
+  });
+})();
 
 // ======================================================
 // MAPA INTERATIVO COM LEAFLET (Vanilla JS)
@@ -193,7 +463,7 @@ function addMsg(text, tipo) {
       <img src="${destination.imagem}" alt="${destination.nome}" class="details-image" loading="lazy">
       <p class="details-text">${destination.desc}</p>
       <p class="details-price">Preço: ${destination.preco}</p>
-      <a href="#form-viagem" class="btn btn-primary" style="margin-top: 1rem;">Planejar viagem para cá</a>
+      <button class="btn btn-primary" style="margin-top: 1rem;" onclick="abrirModalViagem('${destination.nome}')">Planejar viagem para cá</button>
     `;
   }
 

@@ -12,222 +12,322 @@
 integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
 crossorigin=""/>
     <link rel="stylesheet" href="styles.css" />
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   </head>
+<body>
+  <!-- ===== Header (fixo) ===== -->
+  <header class="site-header">
+    <div class="container header-wrap">
+      <a class="brand-pill" href="#inicio" aria-label="Início OrçaTrip">
+        <img src="./source/Logo.png" alt="OrçaTrip" class="brand-logo" />
+      </a>
+      <nav class="header-actions" aria-label="Navegação principal">
+        <a class="btn btn-ghost" href="#como-funciona">Como funciona</a>
+        <a class="btn btn-primary" href="#explorar">Explorar destinos</a>
+      </nav>
+    </div>
+  </header>
 
-  <body>
-    <!-- ===== Header (fixo) ===== -->
-    <header class="site-header">
-      <div class="container header-wrap">
-        <a class="brand-pill" href="#inicio" aria-label="Início OrçaTrip">
-          <img src="./source/Logo.png" alt="OrçaTrip" class="brand-logo" />
-        </a>
-        <nav class="header-actions" aria-label="Navegação principal">
-          <a class="btn btn-ghost" href="#como-funciona">Como funciona</a>
-          <a class="btn btn-primary" href="#explorar">Explorar destinos</a>
-        </nav>
+  <!-- ===== Hero com rotator de fundo ===== -->
+  <main id="conteudo">
+    <section class="hero" id="inicio">
+      <!-- Fundo com slides -->
+      <div class="hero-bg" aria-hidden="true">
+        <div
+          class="slide active"
+          style="background-image: url('./source/praia.jpg')"
+        ></div>
+        <div
+          class="slide"
+          style="background-image: url('./source/london.png')"
+        ></div>
+        <div
+          class="slide"
+          style="background-image: url('./source/montanha.jpg')"
+        ></div>
       </div>
-    </header>
+      <!-- Véu/overlay para leitura -->
+      <div class="hero-overlay" aria-hidden="true"></div>
 
-    <!-- ===== Hero com rotator de fundo ===== -->
-    <main id="conteudo">
-      <section class="hero" id="inicio">
-        <!-- Fundo com slides -->
-        <div class="hero-bg" aria-hidden="true">
-          <div
-            class="slide active"
-            style="background-image: url('./source/praia.jpg')"
-          ></div>
-          <div
-            class="slide"
-            style="background-image: url('./source/london.png')"
-          ></div>
-          <div
-            class="slide"
-            style="background-image: url('./source/montanha.jpg')"
-          ></div>
+      <!-- Conteúdo -->
+      <div class="container hero-content">
+        <h1>Planeje sua viagem com IA e orçamento sob medida</h1>
+        <p class="hero-sub">
+          Informe seu orçamento, datas e preferências — a OrçaTrip faz todo o
+          planejamento por você.
+        </p>
+
+        <div class="form-wrapper">
+          <form class="query-bar" id="form-viagem" autocomplete="off">
+            <div class="field">
+              <label for="orcamento">Orçamento disponível</label>
+              <input
+                id="orcamento"
+                name="orcamento"
+                type="text"
+                placeholder="Ex: R$ 2.000"
+                inputmode="numeric"
+                maxlength="12"
+                required
+              />
+            </div>
+
+            <div class="field">
+              <label for="dataInicio">Data de início</label>
+              <input id="dataInicio" name="dataInicio" type="date" required />
+            </div>
+
+            <div class="field">
+              <label for="dataFim">Data de retorno</label>
+              <input id="dataFim" name="dataFim" type="date" required />
+            </div>
+
+            <div class="field">
+              <label for="preferencias">Interesses e preferências</label>
+              <input
+                id="preferencias"
+                name="preferencias"
+                type="text"
+                placeholder="Ex: praias, natureza, cultura local"
+                required
+              />
+            </div>
+          </form>
+
+          <div class="center-btn">
+            <button
+              class="btn btn-primary lg"
+              type="submit"
+              form="form-viagem"
+            >
+              Gerar ideias de viagem
+            </button>
+          </div>
         </div>
-        <!-- Véu/overlay para leitura -->
-        <div class="hero-overlay" aria-hidden="true"></div>
+      </div>
+    </section>
 
-        <!-- Conteúdo -->
-        <div class="container hero-content">
-          <h1>Planeje sua viagem com IA e orçamento sob medida</h1>
-          <p class="hero-sub">
-            Informe seu orçamento, datas e preferências — a OrçaTrip faz todo o
-            planejamento por você.
-          </p>
+    <!-- ===== Como funciona ===== -->
+    <section id="como-funciona" class="container steps">
+      <h2>Como funciona</h2>
+      <ol>
+        <li><strong>Digite</strong> seu orçamento, datas e preferências.</li>
+        <li>
+          <strong>Deixe a IA analisar</strong> preços e opções para montar um
+          roteiro ideal.
+        </li>
+        <li>
+          <strong>Revise e ajuste</strong> as sugestões e salve seu plano de
+          viagem.
+        </li>
+      </ol>
+    </section>
 
-          <div class="form-wrapper">
-            <form class="query-bar" id="form-viagem" autocomplete="off">
-              <div class="field">
-                <label for="orcamento">Orçamento disponível</label>
-                <input
-                  id="orcamento"
-                  name="orcamento"
-                  type="text"
-                  placeholder="Ex: R$ 2.000"
-                  inputmode="numeric"
-                  maxlength="12"
-                  required
-                />
-              </div>
+    <section id="mapa-section" class="container">
+      <h2>Explore ao seu redor</h2>
+      <p style="margin-bottom: 1.5rem; color: var(--gray-500);">
+        Encontramos estes destinos próximos à sua localização atual. Clique nos marcadores para ver mais detalhes.
+      </p>
 
-              <div class="field">
-                <label for="dataInicio">Data de início</label>
-                <input id="dataInicio" name="dataInicio" type="date" required />
-              </div>
+      <div class="map-and-details-wrapper">
+        <div id="map"></div>
 
-              <div class="field">
-                <label for="dataFim">Data de retorno</label>
-                <input id="dataFim" name="dataFim" type="date" required />
-              </div>
+        <div id="destination-details" class="destination-details-card">
+          <h3>Selecione um destino no mapa</h3>
+          <p class="details-text">Clique em um dos marcadores azuis no mapa para ver informações detalhadas sobre o local, incluindo uma descrição, fotos e sugestões de atividades.</p>
+        </div>
+      </div>
+    </section>
 
-              <div class="field">
-                <label for="preferencias">Interesses e preferências</label>
-                <input
-                  id="preferencias"
-                  name="preferencias"
-                  type="text"
-                  placeholder="Ex: praias, natureza, cultura local"
-                  required
-                />
-              </div>
-            </form>
+    <!-- ===== Sistema de Convites ===== -->
+    <section id="convites" class="container">
+      <h2>Convide amigos e familiares</h2>
+      <p style="margin-bottom: 1.5rem; color: var(--gray-500);">
+        Compartilhe sua viagem para <span id="destino-viagem">[Destino]</span> com amigos e familiares. Envie convites por e-mail e acompanhe quem já confirmou presença.
+      </p>
 
-            <div class="center-btn">
-              <button
-                class="btn btn-primary lg"
-                type="submit"
-                form="form-viagem"
-              >
-                Gerar ideias de viagem
+      <div class="invite-section">
+        <div class="invite-form-container">
+          <h3>Enviar novo convite</h3>
+          <form class="invite-form" id="form-convite">
+            <div class="field">
+              <label for="nome-convidado">Nome do convidado</label>
+              <input
+                id="nome-convidado"
+                name="nome-convidado"
+                type="text"
+                placeholder="Ex: João Silva"
+                required
+              />
+            </div>
+
+            <div class="field">
+              <label for="email-convidado">E-mail do convidado</label>
+              <input
+                id="email-convidado"
+                name="email-convidado"
+                type="email"
+                placeholder="Ex: joao@exemplo.com"
+                required
+              />
+            </div>
+
+            <div class="field">
+              <label for="mensagem-convite">Mensagem personalizada (opcional)</label>
+              <textarea
+                id="mensagem-convite"
+                name="mensagem-convite"
+                placeholder="Ex: Olá! Estou planejando uma viagem incrível e gostaria que você participasse. Confira os detalhes..."
+              ></textarea>
+            </div>
+
+            <button class="btn btn-primary" type="submit" id="btn-enviar-convite">
+              <span id="btn-text">Enviar convite</span>
+              <span id="btn-loading" class="spinner" style="display: none;"></span>
+            </button>
+            
+            <div style="margin-top: 1rem; font-size: 0.9rem; color: var(--gray-500);">
+              <!-- <p><strong>Nota:</strong> Para enviar e-mails reais, configure o EmailJS com suas credenciais.</p> -->
+              <button type="button" class="btn btn-secondary" id="btn-email-fallback" style="margin-top: 0.5rem;">
+                Abrir cliente de e-mail
               </button>
+            </div>
+          </form>
+        </div>
+
+        <div class="invites-list-container">
+          <h3>Convites enviados</h3>
+          <div class="invites-list" id="lista-convites">
+            <!-- Os convites serão inseridos aqui via JavaScript -->
+            <div class="empty-invites" id="empty-invites">
+              <p>Nenhum convite enviado ainda.</p>
+              <p>Envie seu primeiro convite usando o formulário ao lado.</p>
             </div>
           </div>
         </div>
-      </section>
-
-      <!-- ===== Como funciona ===== -->
-      <section id="como-funciona" class="container steps">
-        <h2>Como funciona</h2>
-        <ol>
-          <li><strong>Digite</strong> seu orçamento, datas e preferências.</li>
-          <li>
-            <strong>Deixe a IA analisar</strong> preços e opções para montar um
-            roteiro ideal.
-          </li>
-          <li>
-            <strong>Revise e ajuste</strong> as sugestões e salve seu plano de
-            viagem.
-          </li>
-        </ol>
-      </section>
-
-      <section id="mapa-section" class="container">
-  <h2>Explore ao seu redor</h2>
-  <p style="margin-bottom: 1.5rem; color: var(--gray-500);">
-    Encontramos estes destinos próximos à sua localização atual. Clique nos marcadores para ver mais detalhes.
-  </p>
-
-  <div class="map-and-details-wrapper">
-    <div id="map"></div>
-
-    <div id="destination-details" class="destination-details-card">
-      <h3>Selecione um destino no mapa</h3>
-      <p class="details-text">Clique em um dos marcadores azuis no mapa para ver informações detalhadas sobre o local, incluindo uma descrição, fotos e sugestões de atividades.</p>
       </div>
-  </div>
-</section>
+    </section>
 
-      <!-- ===== Destinos ===== -->
-      <section id="explorar" class="container">
-        <h2>Destinos populares</h2>
-        <div class="places-grid">
-          <article class="place-card">
-            <img
-              src="https://copacabanariohotel.com.br/wp-content/uploads/2024/02/imagem-da-praia-de-copacabana-1024x577.png"
-              alt="Praia de Copacabana no Rio de Janeiro (RJ)"
-              loading="lazy"
-            />
-            <div class="place-info">
-              <h3>Rio de Janeiro (RJ)</h3>
-              <p>
-                Sol, mar e vida urbana vibrante — perfeito para quem quer
-                energia e cultura.
-              </p>
-            </div>
-          </article>
-          <article class="place-card">
-            <img
-              src="https://coracaodamata.com.br/wp-content/uploads/2024/11/imagem-sobre-artigo-noite-encantada-em-gramado-4-1024x538.png"
-              alt="Centro de Gramado iluminado à noite (RS)"
-              loading="lazy"
-            />
-            <div class="place-info">
-              <h3>Gramado (RS)</h3>
-              <p>Charmosa e acolhedora, ideal para casais e famílias.</p>
-            </div>
-          </article>
+    <!-- ===== Destinos ===== -->
+    <section id="explorar" class="container">
+      <h2>Destinos populares</h2>
+      <div class="places-grid">
+        <article class="place-card">
+          <img
+            src="https://copacabanariohotel.com.br/wp-content/uploads/2024/02/imagem-da-praia-de-copacabana-1024x577.png"
+            alt="Praia de Copacabana no Rio de Janeiro (RJ)"
+            loading="lazy"
+          />
+          <div class="place-info">
+            <h3>Rio de Janeiro (RJ)</h3>
+            <p>
+              Sol, mar e vida urbana vibrante — perfeito para quem quer
+              energia e cultura.
+            </p>
+          </div>
+        </article>
+        <article class="place-card">
+          <img
+            src="https://coracaodamata.com.br/wp-content/uploads/2024/11/imagem-sobre-artigo-noite-encantada-em-gramado-4-1024x538.png"
+            alt="Centro de Gramado iluminado à noite (RS)"
+            loading="lazy"
+          />
+          <div class="place-info">
+            <h3>Gramado (RS)</h3>
+            <p>Charmosa e acolhedora, ideal para casais e famílias.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ===== Dúvidas Frequentes ===== -->
+    <section id="faq" class="faq container">
+      <h2>Dúvidas frequentes</h2>
+      <details>
+        <summary>Preciso pagar para usar o OrçaTrip?</summary>
+        <p>
+          Não. O plano básico é gratuito e permite criar até dois roteiros de
+          viagem. Planos pagos oferecem recursos extras de IA.
+        </p>
+      </details>
+      <details>
+        <summary>Posso editar os roteiros depois?</summary>
+        <p>
+          Sim! Você pode ajustar datas, destinos e preferências sempre que
+          quiser.
+        </p>
+      </details>
+      <details>
+        <summary>Como a IA monta os roteiros?</summary>
+        <p>
+          Ela usa dados de hospedagem, transporte e atrações para sugerir
+          opções dentro do seu orçamento e perfil.
+        </p>
+      </details>
+    </section>
+  </main>
+
+  <!-- ===== Modal de Confirmação de Viagem ===== -->
+  <div class="modal-overlay" id="modal-viagem">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Confirmar Viagem</h3>
+        <button class="modal-close" id="modal-close">×</button>
+      </div>
+      <div class="modal-body">
+        <p>Você está prestes a planejar uma viagem para:</p>
+        <div class="trip-details">
+          <div class="trip-detail-item">
+            <span class="trip-detail-label">Destino:</span>
+            <span class="trip-detail-value" id="modal-destino"></span>
+          </div>
+          <div class="trip-detail-item">
+            <span class="trip-detail-label">Orçamento:</span>
+            <span class="trip-detail-value" id="modal-orcamento"></span>
+          </div>
+          <div class="trip-detail-item">
+            <span class="trip-detail-label">Datas:</span>
+            <span class="trip-detail-value" id="modal-datas"></span>
+          </div>
         </div>
-      </section>
-
-      <!-- ===== Dúvidas Frequentes ===== -->
-      <section id="faq" class="faq container">
-        <h2>Dúvidas frequentes</h2>
-        <details>
-          <summary>Preciso pagar para usar o OrçaTrip?</summary>
-          <p>
-            Não. O plano básico é gratuito e permite criar até dois roteiros de
-            viagem. Planos pagos oferecem recursos extras de IA.
-          </p>
-        </details>
-        <details>
-          <summary>Posso editar os roteiros depois?</summary>
-          <p>
-            Sim! Você pode ajustar datas, destinos e preferências sempre que
-            quiser.
-          </p>
-        </details>
-        <details>
-          <summary>Como a IA monta os roteiros?</summary>
-          <p>
-            Ela usa dados de hospedagem, transporte e atrações para sugerir
-            opções dentro do seu orçamento e perfil.
-          </p>
-        </details>
-      </section>
-    </main>
-
-    <!-- ===== Footer ===== -->
-    <footer class="site-footer container">
-      <p>&copy; 2025 OrçaTrip — Trabalho acadêmico de prototipagem web.</p>
-    </footer>
-
-    <!-- ===== Chat flutuante ===== -->
-    <button id="chat-toggle" aria-label="Abrir chat de dúvidas">💬</button>
-
-    <div id="chat-container">
-      <div id="chat-header">
-        <h3>Chat Orça</h3>
-        <button id="chat-close" aria-label="Fechar chat">×</button>
+        <p style="margin-top: 1rem;">Após a confirmação, você poderá convidar amigos e familiares para esta viagem.</p>
       </div>
-      <div id="chat-messages">
-        <div class="msg bot">
-          Olá! 👋 Sou a assistente virtual da OrçaTrip. Como posso ajudar você?
-        </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="modal-cancelar">Cancelar</button>
+        <button class="btn btn-primary" id="modal-confirmar">Confirmar Viagem</button>
       </div>
-      <form id="chat-form">
-        <input
-          type="text"
-          id="chat-input"
-          placeholder="Digite sua dúvida..."
-          maxlength="140"
-          autocomplete="off"
-        />
-        <button type="submit">➤</button>
-      </form>
     </div>
+  </div>
 
+  <!-- ===== Footer ===== -->
+  <footer class="site-footer container">
+    <p>&copy; 2025 OrçaTrip — Trabalho acadêmico de prototipagem web.</p>
+  </footer>
+
+  <!-- ===== Chat flutuante ===== -->
+  <button id="chat-toggle" aria-label="Abrir chat de dúvidas">💬</button>
+
+  <div id="chat-container">
+    <div id="chat-header">
+      <h3>Chat Orça</h3>
+      <button id="chat-close" aria-label="Fechar chat">×</button>
+    </div>
+    <div id="chat-messages">
+      <div class="msg bot">
+        Olá! 👋 Sou a assistente virtual da OrçaTrip. Como posso ajudar você?
+      </div>
+    </div>
+    <form id="chat-form">
+      <input
+        type="text"
+        id="chat-input"
+        placeholder="Digite sua dúvida..."
+        maxlength="140"
+        autocomplete="off"
+      />
+      <button type="submit">➤</button>
+    </form>
+  </div>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
 integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
 crossorigin=""></script>
