@@ -15,7 +15,6 @@ crossorigin=""/>
   </head>
 
   <body>
-    <!-- ===== Header (fixo) ===== -->
     <header class="site-header">
       <div class="container header-wrap">
         <a class="brand-pill" href="#inicio" aria-label="Início OrçaTrip">
@@ -28,10 +27,8 @@ crossorigin=""/>
       </div>
     </header>
 
-    <!-- ===== Hero com rotator de fundo ===== -->
     <main id="conteudo">
       <section class="hero" id="inicio">
-        <!-- Fundo com slides -->
         <div class="hero-bg" aria-hidden="true">
           <div
             class="slide active"
@@ -46,10 +43,8 @@ crossorigin=""/>
             style="background-image: url('./source/montanha.jpg')"
           ></div>
         </div>
-        <!-- Véu/overlay para leitura -->
         <div class="hero-overlay" aria-hidden="true"></div>
 
-        <!-- Conteúdo -->
         <div class="container hero-content">
           <h1>Planeje sua viagem com IA e orçamento sob medida</h1>
           <p class="hero-sub">
@@ -107,7 +102,6 @@ crossorigin=""/>
         </div>
       </section>
 
-      <!-- ===== Como funciona ===== -->
       <section id="como-funciona" class="container steps">
         <h2>Como funciona</h2>
         <ol>
@@ -123,27 +117,35 @@ crossorigin=""/>
         </ol>
       </section>
 
+      <section id="recommendations" class="container hidden-section">
+        <h2>Seu Roteiro OrçaTrip</h2>
+        <p class="section-sub">
+          Com base no seu orçamento e preferências, preparamos estas sugestões:
+        </p>
+        <div id="recommendation-content">
+          </div>
+      </section>
+
       <section id="mapa-section" class="container">
-  <h2>Explore ao seu redor</h2>
-  <p style="margin-bottom: 1.5rem; color: var(--gray-500);">
-    Encontramos estes destinos próximos à sua localização atual. Clique nos marcadores para ver mais detalhes.
-  </p>
+        <h2>Explore ao seu redor</h2>
+        <p style="margin-bottom: 1.5rem; color: var(--gray-500);">
+          Encontramos estes destinos próximos à sua localização atual. Clique nos marcadores para ver mais detalhes.
+        </p>
 
-  <div class="map-and-details-wrapper">
-    <div id="map"></div>
+        <div class="map-and-details-wrapper">
+          <div id="map"></div>
 
-    <div id="destination-details" class="destination-details-card">
-      <h3>Selecione um destino no mapa</h3>
-      <p class="details-text">Clique em um dos marcadores azuis no mapa para ver informações detalhadas sobre o local, incluindo uma descrição, fotos e sugestões de atividades.</p>
-      </div>
-  </div>
-</section>
+          <div id="destination-details" class="destination-details-card">
+            <h3>Selecione um destino no mapa</h3>
+            <p class="details-text">Clique em um dos marcadores azuis no mapa para ver informações detalhadas sobre o local, incluindo uma descrição, fotos e sugestões de atividades.</p>
+          </div>
+        </div>
+      </section>
 
-      <!-- ===== Destinos ===== -->
       <section id="explorar" class="container">
         <h2>Destinos populares</h2>
-        <div class="places-grid">
-          <article class="place-card">
+        <div class="places-grid" id="popular-destinations-grid">
+          <article class="place-card" data-destination="Rio de Janeiro (RJ)">
             <img
               src="https://copacabanariohotel.com.br/wp-content/uploads/2024/02/imagem-da-praia-de-copacabana-1024x577.png"
               alt="Praia de Copacabana no Rio de Janeiro (RJ)"
@@ -152,12 +154,15 @@ crossorigin=""/>
             <div class="place-info">
               <h3>Rio de Janeiro (RJ)</h3>
               <p>
-                Sol, mar e vida urbana vibrante — perfeito para quem quer
-                energia e cultura.
+                Sol, mar e vida urbana vibrante — perfeito para quem quer energia e cultura.
               </p>
+              <button class="btn btn-ghost check-dates-btn" data-destination="Rio de Janeiro (RJ)">
+                Ver Melhores Datas e Eventos
+              </button>
             </div>
           </article>
-          <article class="place-card">
+
+          <article class="place-card" data-destination="Gramado (RS)">
             <img
               src="https://coracaodamata.com.br/wp-content/uploads/2024/11/imagem-sobre-artigo-noite-encantada-em-gramado-4-1024x538.png"
               alt="Centro de Gramado iluminado à noite (RS)"
@@ -166,12 +171,53 @@ crossorigin=""/>
             <div class="place-info">
               <h3>Gramado (RS)</h3>
               <p>Charmosa e acolhedora, ideal para casais e famílias.</p>
+              <button class="btn btn-ghost check-dates-btn" data-destination="Gramado (RS)">
+                Ver Melhores Datas e Eventos
+              </button>
+            </div>
+          </article>
+          
+          <article class="place-card" data-destination="Salvador (BA)">
+            <img
+              src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Pelourinho_-_Salvador%2C_Bahia%2C_Brasil.jpg/1280px-Pelourinho_-_Salvador%2C_Bahia%2C_Brasil.jpg"
+              alt="Pelourinho em Salvador (BA)"
+              loading="lazy"
+            />
+            <div class="place-info">
+              <h3>Salvador (BA)</h3>
+              <p>Berço cultural com história, axé e gastronomia rica. Ideal para cultura.</p>
+              <button class="btn btn-ghost check-dates-btn" data-destination="Salvador (BA)">
+                Ver Melhores Datas e Eventos
+              </button>
+            </div>
+          </article>
+
+          <article class="place-card" data-destination="Fernando de Noronha (PE)">
+            <img
+              src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Fernando_de_Noronha_12.jpg/1280px-Fernando_de_Noronha_12.jpg"
+              alt="Baía dos Porcos em Fernando de Noronha (PE)"
+              loading="lazy"
+            />
+            <div class="place-info">
+              <h3>Fernando de Noronha (PE)</h3>
+              <p>Natureza intocada, mergulho e praias espetaculares. Alto custo.</p>
+              <button class="btn btn-ghost check-dates-btn" data-destination="Fernando de Noronha (PE)">
+                Ver Melhores Datas e Eventos
+              </button>
             </div>
           </article>
         </div>
       </section>
 
-      <!-- ===== Dúvidas Frequentes ===== -->
+      <section id="date-suggestions" class="container hidden-section">
+          <h2>Melhores Datas e Eventos em <span id="dates-destination-name">...</span></h2>
+          <p class="section-sub">
+              Analisamos o clima e os festivais para encontrar a época ideal para sua viagem.
+          </p>
+          <div id="date-suggestions-content" class="date-results-grid">
+              </div>
+      </section>
+
       <section id="faq" class="faq container">
         <h2>Dúvidas frequentes</h2>
         <details>
@@ -198,12 +244,10 @@ crossorigin=""/>
       </section>
     </main>
 
-    <!-- ===== Footer ===== -->
     <footer class="site-footer container">
       <p>&copy; 2025 OrçaTrip — Trabalho acadêmico de prototipagem web.</p>
     </footer>
 
-    <!-- ===== Chat flutuante ===== -->
     <button id="chat-toggle" aria-label="Abrir chat de dúvidas">💬</button>
 
     <div id="chat-container">

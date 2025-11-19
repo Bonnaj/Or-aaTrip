@@ -213,7 +213,7 @@ section {
 /* Destinos */
 .places-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 1.25rem;
   margin-top: 1rem;
 }
@@ -221,17 +221,29 @@ section {
   border-radius: var(--radius);
   overflow: hidden;
   background: #fff;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.08);
 }
 .place-card img {
   width: 100%;
-  height: 300px;
+  height: 250px; /* Reduzi um pouco para o botão caber */
   object-fit: cover;
   display: block;
 }
+/* Novo: usa flex para empurrar o botão para baixo */
 .place-info {
   padding: 1rem;
+  display: flex;
+  flex-direction: column;
 }
+.place-card .place-info p {
+  margin-bottom: 1rem;
+}
+/* Novo: Estilo para o botão de ver datas */
+.check-dates-btn {
+  margin-top: auto; /* Empurra o botão para baixo */
+  align-self: flex-start; 
+}
+
 
 /* FAQ */
 .faq details {
@@ -366,6 +378,161 @@ section {
 }
 #chat-form button:hover {
   background: var(--brand-2);
+}
+
+/* Novo CSS para o estado de carregamento do botão */
+.btn.loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    cursor: wait;
+    opacity: 0.8;
+}
+
+.loader {
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    border-top: 4px solid #fff;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Novo utilitário para esconder a seção antes da geração */
+.hidden-section {
+    display: none;
+    padding-bottom: 0; /* Remove padding se estiver escondida */
+}
+
+/* Estilo para a sub-seção de recomendações */
+#recommendation-content {
+    margin-top: 1.5rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.recommendation-card {
+    background: #fff;
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e7e7e7;
+    transition: transform 0.2s;
+    /* Novo: Utiliza flex para alinhar os elementos internos */
+    display: flex;
+    flex-direction: column;
+}
+
+.recommendation-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+}
+
+.recommendation-card h3 {
+    color: var(--brand-2);
+    margin-bottom: 0.5rem;
+    font-size: 1.25rem;
+}
+
+.recommendation-card > p {
+    font-size: 0.95rem;
+    color: var(--gray-500);
+    margin-bottom: 1rem;
+}
+
+.recommendation-card .total-price {
+    font-weight: 800;
+    color: var(--brand-1);
+    font-size: 1.3rem;
+    margin-top: auto; /* Empurra o preço para baixo */
+    padding-top: 1rem;
+    border-top: 1px dashed #eee;
+}
+
+.section-sub {
+    color: var(--gray-500);
+    margin-top: 0.5rem;
+}
+
+/* Estilos para os detalhes de Transport/Hospedagem/Eventos */
+.rec-details {
+    margin-top: 0.75rem;
+    margin-bottom: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.rec-item {
+    padding: 0.75rem;
+    background: var(--gray-100);
+    border-radius: 0.5rem;
+    font-size: 0.9rem;
+    border-left: 4px solid var(--brand-1);
+}
+
+.rec-item strong {
+    display: block;
+    margin-bottom: 0.2rem;
+    color: var(--brand-2);
+}
+
+.rec-item a {
+    color: var(--brand-1);
+    font-weight: 600;
+    text-decoration: none;
+}
+.rec-item a:hover {
+    text-decoration: underline;
+}
+
+
+/* Novo CSS para a Seção de Sugestões de Data/Evento */
+.date-results-grid {
+    margin-top: 1.5rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+.date-card {
+    background: #fff;
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e7e7e7;
+}
+.date-card h4 {
+    color: var(--brand-1);
+    font-size: 1.15rem;
+    margin-bottom: 0.5rem;
+}
+.date-card .best-dates {
+    font-weight: 700;
+    color: var(--brand-2);
+    display: block;
+    margin-bottom: 0.75rem;
+}
+.date-card ul {
+    list-style-type: none;
+    padding-left: 0;
+    font-size: 0.95rem;
+}
+.date-card ul li {
+    margin-bottom: 0.4rem;
+    padding-left: 1.2em;
+    position: relative;
+}
+.date-card ul li::before {
+    content: "📅";
+    position: absolute;
+    left: 0;
 }
 
 /* Responsivo */
