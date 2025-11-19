@@ -125,10 +125,18 @@ crossorigin=""/>
 
       <section id="mapa-section" class="container">
   <h2>Explore ao seu redor</h2>
-  <p style="margin-bottom: 1rem; color: var(--gray-500);">
-    Encontramos estes destinos próximos à sua localização atual.
+  <p style="margin-bottom: 1.5rem; color: var(--gray-500);">
+    Encontramos estes destinos próximos à sua localização atual. Clique nos marcadores para ver mais detalhes.
   </p>
-  <div id="map"></div>
+
+  <div class="map-and-details-wrapper">
+    <div id="map"></div>
+
+    <div id="destination-details" class="destination-details-card">
+      <h3>Selecione um destino no mapa</h3>
+      <p class="details-text">Clique em um dos marcadores azuis no mapa para ver informações detalhadas sobre o local, incluindo uma descrição, fotos e sugestões de atividades.</p>
+      </div>
+  </div>
 </section>
 
       <!-- ===== Destinos ===== -->

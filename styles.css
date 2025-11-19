@@ -384,23 +384,73 @@ section {
   }
 }
 
-/* ===== MAPA LEAFLET ===== */
+/* ===== MAPA INTERATIVO ===== */
 #mapa-section {
-  text-align: center;
+  text-align: center; /* Centraliza o título e subtítulo */
 }
 
+/* Wrapper para as duas colunas */
+.map-and-details-wrapper {
+  display: flex;
+  gap: 1.5rem; /* Espaçamento entre as colunas */
+  align-items: flex-start; /* Alinha o topo das colunas */
+  max-width: 1200px; /* Para não esticar demais em telas muito grandes */
+  margin-inline: auto; /* Centraliza o wrapper */
+}
+
+/* Coluna do Mapa */
 #map {
-  height: 400px; /* Altura obrigatória */
-  width: 100%;
+  flex: 2; /* O mapa ocupará 2/3 do espaço em telas largas */
+  height: 500px; /* Altura obrigatória para o mapa */
   border-radius: var(--radius);
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  z-index: 1; /* Garante que fique abaixo do header fixo se rolar */
+  z-index: 1; 
 }
 
-/* Ajuste de z-index para o mapa não cobrir o header ou chat */
-.leaflet-pane {
-  z-index: 1 !important; 
+/* Coluna de Detalhes do Destino */
+.destination-details-card {
+  flex: 1; /* A coluna de detalhes ocupará 1/3 do espaço */
+  background: #fff;
+  border-radius: var(--radius);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  padding: 1.5rem;
+  text-align: left; /* Alinha o texto à esquerda dentro do card */
+  min-height: 500px; /* Mesma altura do mapa para alinhamento visual */
+  display: flex; /* Para flexbox interno se precisar alinhar itens */
+  flex-direction: column;
+  gap: 0.8rem;
 }
-.leaflet-top, .leaflet-bottom {
-  z-index: 2 !important;
+
+.destination-details-card h3 {
+  color: var(--brand-1);
+  margin-bottom: 0.5rem;
+}
+
+.destination-details-card .details-image {
+  width: 100%;
+  max-height: 200px; /* Limita a altura da imagem */
+  object-fit: cover;
+  border-radius: var(--radius);
+  margin-bottom: 0.8rem;
+}
+
+.destination-details-card .details-price {
+  font-weight: 700;
+  color: var(--brand-2);
+  font-size: 1.1rem;
+}
+
+.destination-details-card .details-text {
+  color: var(--gray-500);
+  font-size: 0.95rem;
+}
+
+/* Responsividade para telas menores: as colunas se empilham */
+@media (max-width: 900px) {
+  .map-and-details-wrapper {
+    flex-direction: column; /* Transforma as colunas em linhas */
+  }
+  #map, .destination-details-card {
+    min-height: 350px; /* Ajusta altura para telas menores */
+  }
 }

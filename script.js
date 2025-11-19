@@ -123,19 +123,53 @@ function addMsg(text, tipo) {
   });
 
   // 2. "Banco de Dados" simulado (Latitude/Longitude)
-  // Aqui viriam os dados do seu Firebase
+  // Adicionei mais informações como imagem e preço
   const databaseLocais = [
-    { nome: "Cristo Redentor - RJ", lat: -22.9519, lng: -43.2105, desc: "O clássico do Rio." },
-    { nome: "Parque Ibirapuera - SP", lat: -23.5874, lng: -46.6576, desc: "Natureza em SP." },
-    { nome: "Gramado - Centro", lat: -29.3746, lng: -50.8764, desc: "Charme da serra." },
-    { nome: "Pelourinho - BA", lat: -12.9714, lng: -38.5114, desc: "História e cultura." }
+    { 
+      id: 1, 
+      nome: "Cristo Redentor - RJ", 
+      lat: -22.9519, 
+      lng: -43.2105, 
+      desc: "O icônico Cristo Redentor, com vistas deslumbrantes do Rio de Janeiro e da Baía de Guanabara.",
+      imagem: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Corcovado_-_Cristo_Redentor_%282019%29.jpg/800px-Corcovado_-_Cristo_Redentor_%282019%29.jpg",
+      preco: "A partir de R$ 90 (ingresso)" 
+    },
+    { 
+      id: 2, 
+      nome: "Parque Ibirapuera - SP", 
+      lat: -23.5874, 
+      lng: -46.6576, 
+      desc: "Um dos maiores e mais importantes parques urbanos de São Paulo, perfeito para lazer e cultura.",
+      imagem: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/Parque_Ibirapuera_-_Vista_do_lago_principal.jpg/1280px-Parque_Ibirapuera_-_Vista_do_lago_principal.jpg",
+      preco: "Gratuito" 
+    },
+    { 
+      id: 3, 
+      nome: "Gramado - Rua Torta", 
+      lat: -29.3752, 
+      lng: -50.8769, 
+      desc: "A famosa Rua Torta de Gramado, com seu paisagismo encantador e arquitetura europeia.",
+      imagem: "https://viajandocomamigas.com.br/wp-content/uploads/2023/07/Rua-torta-gramado-com-flores-scaled.jpg",
+      preco: "Gratuito" 
+    },
+    { 
+      id: 4, 
+      nome: "Pelourinho - BA", 
+      lat: -12.9714, 
+      lng: -38.5114, 
+      desc: "O centro histórico de Salvador, Patrimônio Mundial da UNESCO, vibrante com suas cores e sons.",
+      imagem: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Pelourinho_-_Salvador%2C_Bahia%2C_Brasil.jpg/1280px-Pelourinho_-_Salvador%2C_Bahia%2C_Brasil.jpg",
+      preco: "Gratuito (algumas atrações pagas)" 
+    }
   ];
+
+  // Elemento onde os detalhes serão exibidos
+  const destinationDetailsDiv = document.getElementById('destination-details');
 
   // Variável do mapa
   let map = null;
 
   // Função para calcular distância (Fórmula de Haversine)
-  // Retorna a distância em Km entre dois pontos
   function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
     const R = 6371; // Raio da terra em km
     const dLat = deg2rad(lat2 - lat1);
@@ -150,6 +184,17 @@ function addMsg(text, tipo) {
 
   function deg2rad(deg) {
     return deg * (Math.PI / 180);
+  }
+
+  // Função para exibir detalhes do destino
+  function displayDestinationDetails(destination) {
+    destinationDetailsDiv.innerHTML = `
+      <h3>${destination.nome}</h3>
+      <img src="${destination.imagem}" alt="${destination.nome}" class="details-image" loading="lazy">
+      <p class="details-text">${destination.desc}</p>
+      <p class="details-price">Preço: ${destination.preco}</p>
+      <a href="#form-viagem" class="btn btn-primary" style="margin-top: 1rem;">Planejar viagem para cá</a>
+    `;
   }
 
   // 3. Inicializa o mapa
@@ -169,27 +214,23 @@ function addMsg(text, tipo) {
     // Adiciona marcador do usuário
     L.marker([lat, lng], { icon: defaultIcon })
       .addTo(map)
-      .bindPopup("<b>Você está aqui!</b><br>Ponto de partida.")
-      .openPopup();
-
-    // Adiciona um local "falso" perto do usuário só para testar a funcionalidade
-    // (Removemos isso quando tiver dados reais)
-    databaseLocais.push({
-      nome: "Destino Surpresa Perto de Você",
-      lat: lat + 0.01, // Um pouco ao lado
-      lng: lng + 0.01,
-      desc: "Sugestão da IA baseada na sua localização."
-    });
+      .bindPopup("<b>Você está aqui!</b><br>Ponto de partida.");
 
     // 4. Filtra e adiciona marcadores próximos (Raio de 500km)
     databaseLocais.forEach(local => {
       const distancia = getDistanceFromLatLonInKm(lat, lng, local.lat, local.lng);
       
       // Se for menor que 500km, adiciona no mapa
-      if (distancia < 500) {
-        L.marker([local.lat, local.lng], { icon: defaultIcon })
+      // Removi o "Destino Surpresa" para usar os locais reais
+      if (distancia < 500) { // Pode ajustar este raio
+        const marker = L.marker([local.lat, local.lng], { icon: defaultIcon })
           .addTo(map)
-          .bindPopup(`<b>${local.nome}</b><br>${local.desc}<br>Aprox. ${Math.round(distancia)}km`);
+          .bindPopup(`<b>${local.nome}</b><br>Aprox. ${Math.round(distancia)}km`);
+        
+        // Adiciona evento de clique ao marcador
+        marker.on('click', () => {
+          displayDestinationDetails(local);
+        });
       }
     });
   }
@@ -207,6 +248,7 @@ function addMsg(text, tipo) {
       }
     );
   } else {
+    console.warn("Geolocalização não é suportada pelo seu navegador.");
     // Navegador não suporta, carrega padrão
     startMap(-23.5505, -46.6333);
   }
